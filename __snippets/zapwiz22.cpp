@@ -1,3 +1,5 @@
+/* it's not fun, unless i win -- NAGI */
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -56,14 +58,12 @@ ll modadd(ll a, ll b, ll MOD) { return ((a % MOD) + (b % MOD)) % MOD; }
 ll modsub(ll a, ll b, ll MOD) { return ((a % MOD) - (b % MOD) + MOD) % MOD; }
 ll modmul(ll a, ll b, ll MOD) { return ((a % MOD) * (b % MOD)) % MOD; }
 
-/*** it's not fun, unless i win ***/
-
 void solve() {}
 
 int main() {
   ios_base::sync_with_stdio(false), cin.tie(nullptr);
   ll TESTS = 1;
-  cin >> TESTS;
+  // cin >> TESTS;
   while (TESTS--) {
     solve();
   }
