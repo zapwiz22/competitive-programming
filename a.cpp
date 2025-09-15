@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 typedef long long ll;
 #ifdef LOCAL
 // freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout),
@@ -14,6 +13,8 @@ typedef long long ll;
 #define mod 1000000007
 #define mod1 998244353
 #define inf 1e15
+#define linf 2e18
+#define nl '\n'
 
 /* Disjoint Set */
 class DisjointSet {
@@ -56,14 +57,34 @@ ll modadd(ll a, ll b, ll MOD) { return ((a % MOD) + (b % MOD)) % MOD; }
 ll modsub(ll a, ll b, ll MOD) { return ((a % MOD) - (b % MOD) + MOD) % MOD; }
 ll modmul(ll a, ll b, ll MOD) { return ((a % MOD) * (b % MOD)) % MOD; }
 
-/*** it's not fun, unless i win ***/
+const ll mxeN = 1e5 + 1;
 
-void solve() {}
+ll n, m, q, a, b, c, k, u, v, w, x, l, r, ans;
+string s;
+
+vector<vector<ll>> adj;
+vector<bool> vis;
+vector<ll> par, dist;
+bool ok;
+
+void solve() {
+  cin >> n >> q;
+  vector<ll> vec, pref(n + 1, 0);
+  for (int i = 0; i < n; i++) {
+    cin >> x;
+    pref[i + 1] = pref[i] + x;
+    vec.push_back(x);
+  }
+  while (q--) {
+    cin >> a >> b;
+    cout << pref[b] - pref[a - 1] << nl;
+  }
+}
 
 int main() {
   ios_base::sync_with_stdio(false), cin.tie(nullptr);
   ll TESTS = 1;
-  cin >> TESTS;
+  // cin >> TESTS;
   while (TESTS--) {
     solve();
   }

@@ -25,7 +25,7 @@ using namespace std;
 // typedef long long ll;
 #define INF INT_MAX
 #define INFL LLONG_MAX
-#define nl "\n"
+// #define nl "\n"
 #define pb push_back
 #define ppb pop_back
 #define mp make_pair
