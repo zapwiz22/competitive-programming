@@ -115,43 +115,12 @@ ll modmul(ll a, ll b, ll MOD) {
 using namespace jk;
 
 void solve() {
-    cin >> n >> k;
-    cin >> s;
-    ll idx = n;
-    for (int i = 1; i < n - 1; i++) {
-        if (s[i] > s[0]) {
-            idx = i;
-            break;
-        }
-        if (s[i] == s[0]) {
-            i++;
-            ll k = 1;
-            while (s[i] == s[0 + k] or s[i] != s[0]) {
-                k++;
-                i++;
-            }
-            if (s[k] < s[i]) {
-            }
-        }
-    }
-    s = s.substr(0, idx);
-    ll i = 0;
-    while (i + s.length() < k) {
-        cout << s;
-        i += s.length();
-    }
-    ll j = 0;
-    while (i < k) {
-        cout << s[j];
-        j++, i++;
-    }
-    cout << nl;
 }
 
 int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
     ll TESTS = 1;
-    // cin >> TESTS;
+    cin >> TESTS;
     while (TESTS--) {
         solve();
     }

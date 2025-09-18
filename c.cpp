@@ -115,35 +115,43 @@ ll modmul(ll a, ll b, ll MOD) {
 using namespace jk;
 
 void solve() {
-    cin >> n >> k;
-    cin >> s;
-    ll idx = n;
-    for (int i = 1; i < n - 1; i++) {
-        if (s[i] > s[0]) {
-            idx = i;
-            break;
+    cin >> n;
+    adj = vector<vector<ll>>(n);
+    vector<ll> indegree(n, 0);
+    for (int i = 0; i < n - 1; i++) {
+        cin >> u >> v >> x >> y, --u, --v;
+        if (x > y) {
+            adj[v].push_back(u);
+            indegree[u]++;
+        } else {
+            adj[u].push_back(v);
+            indegree[v]++;
         }
-        if (s[i] == s[0]) {
-            i++;
-            ll k = 1;
-            while (s[i] == s[0 + k] or s[i] != s[0]) {
-                k++;
-                i++;
-            }
-            if (s[k] < s[i]) {
+    }
+    vector<ll> topo;
+    queue<ll> q;
+    for (int i = 0; i < n; i++) {
+        if (indegree[i] == 0) q.push(i);
+    }
+    while (!q.empty()) {
+        ll top = q.front();
+        q.pop();
+        topo.push_back(top);
+        for (auto &v : adj[top]) {
+            indegree[v]--;
+            if (indegree[v] == 0) {
+                q.push(v);
             }
         }
     }
-    s = s.substr(0, idx);
-    ll i = 0;
-    while (i + s.length() < k) {
-        cout << s;
-        i += s.length();
+    vector<ll> res(n);
+    ll i = 1;
+    for (auto &val : topo) {
+        res[val] = i;
+        i++;
     }
-    ll j = 0;
-    while (i < k) {
-        cout << s[j];
-        j++, i++;
+    for (auto val : res) {
+        cout << val << " ";
     }
     cout << nl;
 }
@@ -151,7 +159,7 @@ void solve() {
 int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
     ll TESTS = 1;
-    // cin >> TESTS;
+    cin >> TESTS;
     while (TESTS--) {
         solve();
     }

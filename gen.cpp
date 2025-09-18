@@ -4,37 +4,24 @@ using namespace std;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 int main() {
-  cout << 1 << "\n";
-  int n = uid(1, 5);
+    cout << 1 << "\n";
+    int n = uid(5, 5);
 
-  // cout << n << " " << m << endl;
-  cout << n << endl;
+    // cout << n << " " << m << endl;
+    cout << n << endl;
 
-  for (int i = 0; i < n; ++i) {
-    // cout << uid(1, 10) << " \n"[i == n - 1];
-    // cout << uid(0, 25) + 'a' << " \n"[i == n - 1];
-    int m = uid(1, 5);
-    // cout << m << " ";
-    set<int> st;
-    for (int i = 0; i < m; i++) {
-      int q = uid(1, 5);
-      st.insert(q);
+    for (int i = 0; i < n; ++i) {
+        cout << uid(-2, 2) << " \n"[i == n - 1];
     }
-    cout << st.size() << " ";
-    for (auto &val : st) {
-      cout << val << " ";
-    }
-    cout << endl;
-  }
 
-  // int l = uid(1, n), r = uid(l, n);
-  // cout << l << " " << r << endl;
+    // int l = uid(1, n), r = uid(l, n);
+    // cout << l << " " << r << endl;
 
-  // for (int i = 0; i < m; ++i) {
-  //   cout << uid(1, 10) << " \n"[i == m - 1];
-  // }
+    // for (int i = 0; i < m; ++i) {
+    //   cout << uid(1, 10) << " \n"[i == m - 1];
+    // }
 
-  return 0;
+    return 0;
 }
 
 // #include <bits/stdc++.h>

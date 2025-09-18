@@ -114,44 +114,33 @@ ll modmul(ll a, ll b, ll MOD) {
 }  // namespace jk
 using namespace jk;
 
+vector<vector<ll>> dp;
+vector<ll> vec;
+ll f(ll i, ll mxe, ll mp) {
+    if (i == n) return 1;
+    if (dp[mxe + 1][mp + 1] != -1) return dp[mxe + 1][mp + 1];
+    ll cnt = f(i + 1, mxe, mp);  // didn't take
+    if (mxe == -1 or vec[i] >= vec[mxe]) {
+        cnt = modadd(cnt, f(i + 1, i, mp), mod);
+    } else if (mp == -1 or vec[i] >= vec[mp]) {
+        cnt = modadd(cnt, f(i + 1, mxe, i), mod);
+    }
+    return dp[mxe + 1][mp + 1] = cnt;
+}
+
 void solve() {
-    cin >> n >> k;
-    cin >> s;
-    ll idx = n;
-    for (int i = 1; i < n - 1; i++) {
-        if (s[i] > s[0]) {
-            idx = i;
-            break;
-        }
-        if (s[i] == s[0]) {
-            i++;
-            ll k = 1;
-            while (s[i] == s[0 + k] or s[i] != s[0]) {
-                k++;
-                i++;
-            }
-            if (s[k] < s[i]) {
-            }
-        }
-    }
-    s = s.substr(0, idx);
-    ll i = 0;
-    while (i + s.length() < k) {
-        cout << s;
-        i += s.length();
-    }
-    ll j = 0;
-    while (i < k) {
-        cout << s[j];
-        j++, i++;
-    }
-    cout << nl;
+    cin >> n;
+    dp = vector<vector<ll>>(n + 1, vector<ll>(n + 1, -1));
+    vec = vector<ll>(n);
+    for (ll &x : vec) cin >> x;
+    ll ans = f(0, -1, -1);
+    cout << (ans % mod) << nl;
 }
 
 int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
     ll TESTS = 1;
-    // cin >> TESTS;
+    cin >> TESTS;
     while (TESTS--) {
         solve();
     }
