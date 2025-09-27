@@ -4,24 +4,17 @@ using namespace std;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 int main() {
-    cout << 1 << "\n";
-    int n = uid(5, 5);
 
-    // cout << n << " " << m << endl;
-    cout << n << endl;
+  int n = uid(1,5);
+  int k = uid(1,n), x = uid(1,n);
+  cout << n << " " << k << " " << x << endl;
 
-    for (int i = 0; i < n; ++i) {
-        cout << uid(-2, 2) << " \n"[i == n - 1];
-    }
+  for (int i=0;i<n;i++) {
+    cout << uid(1,5) <<" ";
+  }
+  cout << endl;
 
-    // int l = uid(1, n), r = uid(l, n);
-    // cout << l << " " << r << endl;
-
-    // for (int i = 0; i < m; ++i) {
-    //   cout << uid(1, 10) << " \n"[i == m - 1];
-    // }
-
-    return 0;
+  return 0;
 }
 
 // #include <bits/stdc++.h>
