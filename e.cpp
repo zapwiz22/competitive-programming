@@ -1,7 +1,14 @@
 #include <bits/stdc++.h>
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
+using namespace __gnu_pbds;
 
 typedef long long ll;
+template <typename T>
+using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
 #ifdef LOCAL
 #include "debug.h"
 #else
@@ -105,13 +112,11 @@ ll modmul(ll a, ll b, ll MOD) { return ((a % MOD) * (b % MOD)) % MOD; }
 }  // namespace jk
 using namespace jk;
 
-const ll mxeN = 1e3 + 1;
-
-ll n, m, q, a, b, c, k, u, v, w, x, y, z, l, r, ans;
-string s;
+const ll mxeN = 2e5 + 1;
+ll n, k;
 
 void solve() {
-	
+    
 }
 
 int main() {
