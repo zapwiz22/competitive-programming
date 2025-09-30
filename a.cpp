@@ -113,16 +113,37 @@ ll modmul(ll a, ll b, ll MOD) { return ((a % MOD) * (b % MOD)) % MOD; }
 using namespace jk;
 
 const ll mxeN = 2e5 + 1;
-ll n, k;
+ll n, q;
 
 void solve() {
-    
+    cin >> n >> q;
+    FenwickTree ft(n);
+    for (int i = 0; i < n; i++) {
+        ll x;
+        cin >> x;
+        ft.update(i + 1, x);
+    }
+    while (q--) {
+        ll type;
+        cin >> type;
+        if (type == 1) {
+            ll k, u;
+            cin >> k >> u;
+            ll delta = ft.get(k) - ft.get(k - 1);
+            delta = u - delta;
+            ft.update(k, delta);
+        } else {
+            ll a, b;
+            cin >> a >> b;
+            cout << ft.get(b) - ft.get(--a) << nl;
+        }
+    }
 }
 
 int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
     ll TESTS = 1;
-    cin >> TESTS;
+    // cin >> TESTS;
     while (TESTS--) {
         solve();
     }
