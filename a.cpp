@@ -57,13 +57,15 @@ struct FenwickTree {
     FenwickTree(ll size) { bit.resize(size + 2, 0); }
     void update(ll i, ll delta) {
         for (; i < bit.size(); i += (i & (-i))) {
-            bit[i] += delta;
+            // bit[i] += delta;
+            bit[i] = (bit[i] + delta) % mod;
         }
     }
     ll get(ll i) {
         ll sum = 0;
         for (; i > 0; i -= (i & (-i))) {
-            sum += bit[i];
+            // sum += bit[i];
+            sum = (sum + bit[i]) % mod;
         }
         return sum;
     }
@@ -112,38 +114,19 @@ ll modmul(ll a, ll b, ll MOD) { return ((a % MOD) * (b % MOD)) % MOD; }
 }  // namespace jk
 using namespace jk;
 
-const ll mxeN = 2e5 + 1;
-ll n, q;
+const ll N = 1e3 + 1;
+ll n;
 
 void solve() {
-    cin >> n >> q;
-    FenwickTree ft(n);
-    for (int i = 0; i < n; i++) {
-        ll x;
-        cin >> x;
-        ft.update(i + 1, x);
-    }
-    while (q--) {
-        ll type;
-        cin >> type;
-        if (type == 1) {
-            ll k, u;
-            cin >> k >> u;
-            ll delta = ft.get(k) - ft.get(k - 1);
-            delta = u - delta;
-            ft.update(k, delta);
-        } else {
-            ll a, b;
-            cin >> a >> b;
-            cout << ft.get(b) - ft.get(--a) << nl;
-        }
-    }
 }
 
 int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
+#ifdef LOCAL
+    freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout), freopen("error.txt", "w", stderr);
+#endif
     ll TESTS = 1;
-    // cin >> TESTS;
+    cin >> TESTS;
     while (TESTS--) {
         solve();
     }
