@@ -57,13 +57,15 @@ struct FenwickTree {
     FenwickTree(ll size) { bit.resize(size + 2, 0); }
     void update(ll i, ll delta) {
         for (; i < bit.size(); i += (i & (-i))) {
-            bit[i] += delta;
+            // bit[i] += delta;
+            bit[i] = (bit[i] + delta) % mod;
         }
     }
     ll get(ll i) {
         ll sum = 0;
         for (; i > 0; i -= (i & (-i))) {
-            sum += bit[i];
+            // sum += bit[i];
+            sum = (sum + bit[i]) % mod;
         }
         return sum;
     }
@@ -112,8 +114,8 @@ ll modmul(ll a, ll b, ll MOD) { return ((a % MOD) * (b % MOD)) % MOD; }
 }  // namespace jk
 using namespace jk;
 
-const ll mxeN = 2e5 + 1;
-ll n, k;
+const ll N = 1e3 + 1;
+ll n;
 
 void solve() {
     

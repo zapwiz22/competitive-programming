@@ -118,13 +118,12 @@ const ll N = 1e3 + 1;
 ll n;
 
 void solve() {
+    ll n, k;
+    cin >> n >> k;
 }
 
 int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
-#ifdef LOCAL
-    freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout), freopen("error.txt", "w", stderr);
-#endif
     ll TESTS = 1;
     cin >> TESTS;
     while (TESTS--) {

@@ -4,18 +4,21 @@ using namespace std;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 int main() {
+    int n = uid(1, 5);
+    int k = uid(1, n), x = uid(1, n);
+    cout << n << " " << k << " " << x << endl;
 
-  int n = uid(1,5);
-  int k = uid(1,n), x = uid(1,n);
-  cout << n << " " << k << " " << x << endl;
+    for (int i = 0; i < n; i++) {
+        cout << uid(1, 5) << " ";
+    }
+    cout << endl;
 
-  for (int i=0;i<n;i++) {
-    cout << uid(1,5) <<" ";
-  }
-  cout << endl;
-
-  return 0;
+    return 0;
 }
+
+/* how to generate a tree
+  print uid(1,i-1) and i
+*/
 
 // #include <bits/stdc++.h>
 // using namespace std;
