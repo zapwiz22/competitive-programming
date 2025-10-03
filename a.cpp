@@ -33,19 +33,23 @@ struct SegmentTree {
     }
     void build() {
         for (int i = n - 1; i > 0; i--)
-            tree[i] = tree[i << 1] + tree[i << 1 | 1];
+            // tree[i] = tree[i << 1] + tree[i << 1 | 1];
+            tree[i] = gcd(tree[i << 1], tree[i << 1 | 1]);
     }
     void modify(ll p, ll val) {
         for (tree[p += n] = val; p > 1; p >>= 1)
-            tree[p >> 1] = tree[p] + tree[p ^ 1];
+            tree[p >> 1] = gcd(tree[p], tree[p ^ 1]);
+        // tree[p >> 1] = tree[p] + tree[p ^ 1];
     }
     ll query(ll l, ll r) {
         ll res = 0;
         for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
             if (l & 1)
-                res += tree[l++];
+                // res += tree[l++];
+                res = gcd(res, tree[l++]);
             if (r & 1)
-                res += tree[--r];
+                // res += tree[--r];
+                res = gcd(res, tree[--r]);
         }
         return res;
     }
@@ -68,6 +72,35 @@ struct FenwickTree {
             sum = (sum + bit[i]) % mod;
         }
         return sum;
+    }
+};
+
+/* Sparse Table */
+struct SparseTable {
+    vector<ll> a;
+    vector<vector<ll>> sp;
+    ll LOG, mxeN;
+    SparseTable(ll mxeSize) {
+        a.resize(mxeSize, 0);
+        mxeN = mxeSize;
+        LOG = log2(mxeSize) + 1;
+        sp.assign(mxeN, vector<ll>(LOG, 0));
+    }
+    void modify(ll idx, ll val) {
+        a[idx] = val;
+        sp[idx][0] = val;
+    }
+    void build() {
+        for (int j = 1; j < LOG; j++) {
+            for (int i = 0; i + (1 << j) - 1 < mxeN; i++) {
+                sp[i][j] = gcd(sp[i][j - 1], sp[i + (1 << (j - 1))][j - 1]);
+            }
+        }
+    }
+    ll query(ll l, ll r) {
+        ll len = r - l + 1;
+        ll k = 31 - __builtin_clz(len);
+        return gcd(sp[l][k], sp[r - (1 << k) + 1][k]);
     }
 };
 
@@ -115,11 +148,9 @@ ll modmul(ll a, ll b, ll MOD) { return ((a % MOD) * (b % MOD)) % MOD; }
 using namespace jk;
 
 const ll N = 1e3 + 1;
-ll n;
 
 void solve() {
-    ll n, k;
-    cin >> n >> k;
+    
 }
 
 int main() {
