@@ -1,14 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define uid(a, b) uniform_int_distribution<int>(a, b)(rng)
+#define ll long long
+#define uid(a, b) uniform_int_distribution<ll>(a, b)(rng)
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 int main() {
-    cout << 1 << endl;
-    int n = uid(2, 10);
-    // int k = uid(0, n * n - 1);
-    int k = 0;
-    cout << n << " " << k << endl;
+    int tests = 1;
+    cout << tests << endl;
+    int n = uid(1, 10);
+    cout << n << endl;
+    for (int i = 0; i < n; i++) {
+        cout << uid(1, 10) << endl;
+    }
 }
 
 /* how to generate a tree
