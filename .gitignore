@@ -7,3 +7,5 @@ a
 temp
 *.txt
 .vscode/
+.idea/
+cmake-build-debug/
