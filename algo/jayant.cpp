@@ -1,6 +1,6 @@
 /*
  * author: zapwiz22
- * created on 18-10-2025 at 19:41:09
+ * created on ${CURRENT_DATE}-${CURRENT_MONTH}-${CURRENT_YEAR} at ${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}
  */
 
 #include <bits/stdc++.h>
