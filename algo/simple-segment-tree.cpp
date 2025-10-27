@@ -1,5 +1,3 @@
-#include "./zapwiz22.cpp"
-
 /* Segment Tree */
 struct SegmentTree {
     vector<ll> tree;

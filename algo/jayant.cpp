@@ -1,8 +1,3 @@
-/*
- * author: zapwiz22
- * created on ${CURRENT_DATE}-${CURRENT_MONTH}-${CURRENT_YEAR} at ${CURRENT_HOUR}:${CURRENT_MINUTE}:${CURRENT_SECOND}
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -12,7 +7,8 @@ using namespace __gnu_pbds;
 
 typedef long long ll;
 template <typename T>
-using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+using ordered_set =
+    tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 #ifdef LOCAL
 #include "debug.h"
@@ -22,23 +18,23 @@ using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statisti
 
 #define mod 1000000007
 #define mod1 998244353
-#define inf 1e15
-#define linf 2e18
+#define inf (ll)1e15
+#define linf (ll)2e18
 #define nl '\n'
 
 const ll N = 1e3 + 1;
 
-void solve() {
-    
-}
+void solve() {}
 
 int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
     ll TESTS = 1;
     cin >> TESTS;
+
     for (int Case = 1; Case <= TESTS; Case++) {
         debug(Case);
         solve();
     }
+
     return 0;
 }

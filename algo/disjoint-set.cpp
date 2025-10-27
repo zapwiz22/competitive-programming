@@ -1,5 +1,3 @@
-#include "./zapwiz22.cpp"
-
 /* Disjoint Set */
 class DisjointSet {
    private:
