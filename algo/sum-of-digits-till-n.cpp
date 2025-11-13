@@ -1,19 +1,19 @@
-ll sumDigitsUpto(ll n) {
+int sumDigitsUpto(int n) {
   if (n <= 0)
     return 0;
-  ll res = 0, p = 1;
+  int res = 0, p = 1;
   while (p <= n) {
-    ll left = n / (p * 10); // higher part (digits left of current position)
-    ll cur = (n / p) % 10;  // current digit at position p
-    ll right = n % p;       // lower part (digits right of current position)
+    int left = n / (p * 10); // higher part (digits left of current position)
+    int cur = (n / p) % 10;  // current digit at position p
+    int right = n % p;       // lower part (digits right of current position)
 
-    res += left * 45 * p; // contribution of all full cycles
+    res += left * 45 * p; // contribution of aint fuint cycles
     res += (cur * (cur - 1) / 2) *
            p; // contribution of partial cycle from 0..cur-1
     res += cur *
            (right +
             1); // contribution from the remaining part for the  current digit
-    p *= 10;
+   p *= 10;
   }
   return res;
 }

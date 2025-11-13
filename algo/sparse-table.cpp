@@ -7,16 +7,16 @@
 */
 
 struct SparseTable {
-    vector<ll> a;
-    vector<vector<ll>> sp;
-    ll LOG, mxeN;
-    SparseTable(ll mxeSize) {
+    vector<int> a;
+    vector<vector<int>> sp;
+    int LOG, mxeN;
+    SparseTable(int mxeSize) {
         a.resize(mxeSize, 0);
         mxeN = mxeSize;
         LOG = log2(mxeSize) + 1;
-        sp.assign(mxeN, vector<ll>(LOG, 0));
+        sp.assign(mxeN, vector<int>(LOG, 0));
     }
-    void modify(ll idx, ll val) {
+    void modify(int idx, int val) {
         a[idx] = val;
         sp[idx][0] = val;
     }
@@ -27,9 +27,9 @@ struct SparseTable {
             }
         }
     }
-    ll query(ll l, ll r) {
-        ll len = r - l + 1;
-        ll k = 31 - __builtin_clz(len);
+    int query(int l, int r) {
+        int len = r - l + 1;
+        int k = 31 - __builtin_clz(len);
         return gcd(sp[l][k], sp[r - (1 << k) + 1][k]);
     }
 };
