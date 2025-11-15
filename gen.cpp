@@ -1,8 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define ll long long
-#define uid(a, b) uniform_int_distribution<ll>(a, b)(rng)
+#define int long long
+#define uid(a, b) uniform_int_distribution<int>(a, b)(rng)
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+#undef int
 
 int main() {
     int tests = 1;
@@ -10,7 +12,7 @@ int main() {
     int n = uid(1, 10);
     cout << n << endl;
     for (int i = 0; i < n; i++) {
-        cout << uid(0, 1);
+        cout << uid(1, 200) << " ";
     }
     cout << endl;
 }
