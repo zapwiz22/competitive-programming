@@ -9,18 +9,11 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 int main() {
     int tests = 1;
     cout << tests << endl;
-    // int n = uid(1, 10);
-    int n = 10;
-    cout << n << endl;
-    vector<int> vec(n);
-    iota(vec.begin(), vec.end(), 1);
-    random_device rd;
-    mt19937 g(rd());
-    shuffle(vec.begin(), vec.end(), g);
-    for (auto val : vec) {
-        cout << val << " ";
-    }
-    cout << endl;
+
+    // generation 
+    
+
+    return 0;
 }
 
 /* how to generate a tree
