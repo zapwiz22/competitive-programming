@@ -6,12 +6,8 @@ using namespace __gnu_pbds;
 template <typename T>
 using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-/*
-
-*/
-
 #define int long long
-mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 const int mod = 1000000007, mod1 = 998244353, inf = 1e18;
 const int N = 1e3 + 1;
 
@@ -27,9 +23,8 @@ int main() {
     int tests = 1;
     cin >> tests;
     for (int i = 1; i <= tests; i++) {
-        cerr << "Case #" << i << ": ";
+        cerr << "Case #" << i << ": " << endl;
         solve();
-        cerr << endl;
     }
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
