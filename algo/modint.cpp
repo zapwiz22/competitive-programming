@@ -38,9 +38,12 @@ struct Mint {
     Mint pow(int b) const {
         Mint ans = 1;
         Mint a = *this;
-        for (; b; b >>= 1, a = a * a)
+        while (b>0) {
             if (b & 1)
                 ans *= a;
+            a = a * a;
+            b >>= 1;
+        }
         return ans;
     }
     friend Mint operator/(const Mint& l, const Mint& r) {
