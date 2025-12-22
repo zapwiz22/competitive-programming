@@ -7,27 +7,29 @@ template <typename T>
 using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 #define int long long
-mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
-const int mod = 1000000007, mod1 = 998244353, inf = 1e18;
-const int N = 1e3 + 1;
+mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
+const int INF = 1e18, MOD = 1000000007; // 998244353;
 
-void solve() {
-    
+void Solve() {
+
 }
 
 #undef int
 
 int main() {
+#ifdef ZAP
+    freopen("int", "r", stdin), freopen("out1", "w", stdout), freopen("err", "w", stderr);
+#endif
     auto begin = std::chrono::high_resolution_clock::now();
     ios_base::sync_with_stdio(false), cin.tie(nullptr);
-    int tests = 1;
-    cin >> tests;
-    for (int i = 1; i <= tests; i++) {
+    int T = 1;
+    cin >> T;
+    for (int i = 1; i <= T; i++) {
         cerr << "Case #" << i << ": " << endl;
-        solve();
+        Solve();
     }
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
-    cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n"; 
+    cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
     return 0;
 }

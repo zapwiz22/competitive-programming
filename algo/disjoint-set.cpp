@@ -1,10 +1,10 @@
 /* Disjoint Set */
-class DisjointSet {
-   private:
+struct DSU {
+  private:
     vector<int> par, sizes;
 
-   public:
-    DisjointSet(int n) : par(n), sizes(n, 1) { iota(par.begin(), par.end(), 0); }
+  public:
+    DSU(int n) : par(n), sizes(n, 1) { iota(par.begin(), par.end(), 0); }
     int find(int x) { return (par[x] == x ? x : par[x] = find(par[x])); }
     bool unite(int x, int y) {
         int x_root = find(x), y_root = find(y);

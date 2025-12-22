@@ -10,8 +10,10 @@ int main() {
     int tests = 1;
     cout << tests << endl;
 
-    // generation 
-    
+    // generation
+    while (tests--) {
+        
+    }
 
     return 0;
 }
@@ -21,7 +23,7 @@ int main() {
 */
 
 /* how to randomly shuffle a vector
-   // Initialize random number generator
+    // Initialize random number generator
     random_device rd;
     mt19937 g(rd());
 
