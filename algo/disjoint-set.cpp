@@ -1,4 +1,3 @@
-/* Disjoint Set */
 struct DSU {
   private:
     vector<int> par, sizes;
