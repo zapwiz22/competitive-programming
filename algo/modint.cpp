@@ -1,5 +1,4 @@
-typedef long long int;
-constexpr int MAX_N = 1e6 + 14, MOD = 1'000'000'007;
+constexpr int MAX_N = 1e6 + 14;
 
 struct Mint {
     int x;
@@ -38,7 +37,7 @@ struct Mint {
     Mint pow(int b) const {
         Mint ans = 1;
         Mint a = *this;
-        while (b>0) {
+        while (b > 0) {
             if (b & 1)
                 ans *= a;
             a = a * a;
