@@ -9,11 +9,11 @@ int sumDigitsUpto(int n) {
 
     res += left * 45 * p; // contribution of aint fuint cycles
     res += (cur * (cur - 1) / 2) *
-           p; // contribution of partial cycle from 0..cur-1
+      p; // contribution of partial cycle from 0..cur-1
     res += cur *
-           (right +
-            1); // contribution from the remaining part for the  current digit
-   p *= 10;
+      (right +
+        1); // contribution from the remaining part for the  current digit
+    p *= 10;
   }
   return res;
 }

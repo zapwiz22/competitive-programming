@@ -28,7 +28,7 @@ using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node
 const int N = 1e3 + 1;
 
 void solve() {
-    
+
 }
 
 #undef int

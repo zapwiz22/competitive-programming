@@ -1,9 +1,9 @@
-/* 
+/*
 if the mod value is not necerssarily prime then can't use modinv
 instead find formulas so that all can be computed as sums, differneces and
-products and no modinv is required 
+products and no modinv is required
 
-example as in the below question of Atcoder 
+example as in the below question of Atcoder
 https://atcoder.jp/contests/abc425/tasks/abc425_e
 submission: https://atcoder.jp/contests/abc425/submissions/69688709
 
@@ -11,7 +11,7 @@ got to know that if smaller n and r values then we can precompute ncr as
 nCr = (n-1)C(r-1) + (n-1)Cr
 
 also to find s = (c1 + c2 + c3 + ... + cn)!/[(c1!)*(c2!)*...*(cn!)]
-we can write s as 
+we can write s as
 s = [(c1)!/(c1!)]*[(c1+c2)!/(c2!)]*[(c1+c2+c3)!/c3!]*...*[(c1+c2+...+cn)!/cn!]
 */
 
@@ -78,23 +78,23 @@ namespace jk {
 
 	/* Disjoint Set */
 	class DisjointSet {
-		private:
-			vector<ll> par, sizes;
+	private:
+		vector<ll> par, sizes;
 
-		public:
-			DisjointSet(ll n) : par(n), sizes(n, 1) { iota(par.begin(), par.end(), 0); }
-			ll find(ll x) { return (par[x] == x ? x : par[x] = find(par[x])); }
-			bool unite(ll x, ll y) {
-				ll x_root = find(x), y_root = find(y);
-				if (x_root == y_root)
-					return false;
-				if (sizes[x_root] < sizes[y_root])
-					swap(x_root, y_root);
-				sizes[x_root] += sizes[y_root];
-				par[y_root] = x_root;
-				return true;
-			}
-			ll tree_len(ll x) { return sizes[find(x)]; }
+	public:
+		DisjointSet(ll n) : par(n), sizes(n, 1) { iota(par.begin(), par.end(), 0); }
+		ll find(ll x) { return (par[x] == x ? x : par[x] = find(par[x])); }
+		bool unite(ll x, ll y) {
+			ll x_root = find(x), y_root = find(y);
+			if (x_root == y_root)
+				return false;
+			if (sizes[x_root] < sizes[y_root])
+				swap(x_root, y_root);
+			sizes[x_root] += sizes[y_root];
+			par[y_root] = x_root;
+			return true;
+		}
+		ll tree_len(ll x) { return sizes[find(x)]; }
 	};
 
 	/* Binary Exponentiation */
@@ -142,20 +142,20 @@ const ll mxeN = 5e3 + 1;
 ll n, m, q, a, b, c, k, u, v, w, x, y, z, l, r, ans;
 string s;
 
-vector<vector<ll>> ncr(mxeN,vector<ll>(mxeN,0));
+vector<vector<ll>> ncr(mxeN, vector<ll>(mxeN, 0));
 
 void solve() {
 	ll  sum = 0;
 	cin >> x;
 	vector<ll> vec(x);
-	for (ll &x:vec) {
+	for (ll& x : vec) {
 		cin >> x;
 	}
 	ans = 1;
-	for (auto &val:vec) {
+	for (auto& val : vec) {
 		sum += val;
 		ans *= ncr[sum][val];
-		ans = ans%m;
+		ans = ans % m;
 	}
 	cout << ans << nl;
 }
@@ -168,10 +168,10 @@ int main() {
 	cin >> m;
 
 	ncr[0][0] = 1;
-	for (int i=1;i<mxeN;i++) {
+	for (int i = 1; i < mxeN; i++) {
 		ncr[i][0] = 1;
-		for (int j=1;j<=i;j++) {
-			ncr[i][j] = (ncr[i-1][j-1] + ncr[i-1][j])%m;
+		for (int j = 1; j <= i; j++) {
+			ncr[i][j] = (ncr[i - 1][j - 1] + ncr[i - 1][j]) % m;
 		}
 	}
 

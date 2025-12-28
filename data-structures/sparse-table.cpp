@@ -1,11 +1,9 @@
 /* Sparse Table */
-
 /*
     find the queries in O(1)
     precalculates everything in log terms O(nlogn)
     and then gives the result by using the precalculated stuff
 */
-
 struct SparseTable {
     vector<int> a;
     vector<vector<int>> sp;

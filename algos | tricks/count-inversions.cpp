@@ -24,11 +24,11 @@ long long sum(int i) {
   return res;
 }
 
-long long countInversions(vector<long long> &vec) {
+long long countInversions(vector<long long>& vec) {
   int size = vec.size();
   n = *max_element(vec.begin(), vec.end());
   long long ans = 0;
-  for (auto &val : vec) {
+  for (auto& val : vec) {
     ans = (ans + sum(n) - sum(val)) % MOD;
     update(val, 1);
   }

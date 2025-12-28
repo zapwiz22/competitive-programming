@@ -2,7 +2,7 @@ constexpr int MAX_N = 1e6 + 14;
 
 struct Mint {
     int x;
-    Mint(int x = 0) : x((x % MOD + MOD) % MOD) {
+    Mint(int x = 0) : x((x% MOD + MOD) % MOD) {
     }
     explicit operator int() const {
         return x;

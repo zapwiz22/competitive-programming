@@ -14,7 +14,7 @@ constexpr int INF = 1e18, MOD = 1000000007;
 
 struct Mint {
     int x;
-    Mint(int x = 0) : x((x % MOD + MOD) % MOD) {
+    Mint(int x = 0) : x((x% MOD + MOD) % MOD) {
     }
     explicit operator int() const {
         return x;
@@ -148,8 +148,7 @@ struct SegmentTree {
 
 template <class T, class U>
 // source: https://github.com/sharmaharisam/Generic_all_purpose_segtree/blob/main/Segtree.cpp
-struct LSegTree
-{
+struct LSegTree {
     vector<T> st;
     vector<U> lazy;
     int n;
@@ -162,8 +161,7 @@ struct LSegTree
     max: identity_element=LLONG_MIN;identity_update=0;
     min: identity_element=LLONG_MAX;identity_update=0;
     */
-    LSegTree(int n, T identity_element, U identity_update)
-    {
+    LSegTree(int n, T identity_element, U identity_update) {
         this->n = n;
         this->identity_element = identity_element;
         this->identity_update = identity_update;
@@ -171,17 +169,14 @@ struct LSegTree
         lazy.assign(4 * n, identity_update);
     }
 
-    T combine(T l, T r)
-    {
+    T combine(T l, T r) {
         // combine 2 nodes
         T ans = max(l, r);
         return ans;
     }
 
-    void buildUtil(int v, int tl, int tr, vector<T> &a)
-    {
-        if (tl == tr)
-        {
+    void buildUtil(int v, int tl, int tr, vector<T>& a) {
+        if (tl == tr) {
             st[v] = a[tl];
             return;
         }
@@ -191,28 +186,24 @@ struct LSegTree
         st[v] = combine(st[2 * v + 1], st[2 * v + 2]);
     }
 
-    T apply(T curr, U upd, int tl, int tr)
-    {
+    T apply(T curr, U upd, int tl, int tr) {
         // transform current answer curr to new answer upd for a node
         T ans = max(curr, upd);
         return ans;
     }
 
-    U combineUpdate(U old_upd, U new_upd, int tl, int tr)
-    {
+    U combineUpdate(U old_upd, U new_upd, int tl, int tr) {
         // update lazy node with old and new values combined..
         U ans = old_upd;
         ans = max(ans, new_upd);
         return ans;
     }
 
-    void push_down(int v, int tl, int tr)
-    {
+    void push_down(int v, int tl, int tr) {
         if (lazy[v] == identity_update)
             return;
         st[v] = apply(st[v], lazy[v], tl, tr);
-        if (2 * v + 2 < 4 * n)
-        {
+        if (2 * v + 2 < 4 * n) {
             int tm = (tl + tr) >> 1;
             lazy[2 * v + 1] = combineUpdate(lazy[2 * v + 1], lazy[v], tl, tm);
             lazy[2 * v + 2] = combineUpdate(lazy[2 * v + 2], lazy[v], tm + 1, tr);
@@ -220,35 +211,28 @@ struct LSegTree
         lazy[v] = identity_update;
     }
 
-    T queryUtil(int v, int tl, int tr, int l, int r)
-    {
+    T queryUtil(int v, int tl, int tr, int l, int r) {
         push_down(v, tl, tr);
         if (l > r)
             return identity_element;
-        if (tr < l or tl > r)
-        {
+        if (tr < l or tl > r) {
             return identity_element;
         }
-        if (l <= tl and r >= tr)
-        {
+        if (l <= tl and r >= tr) {
             return st[v];
         }
         int tm = (tl + tr) >> 1;
         return combine(queryUtil(2 * v + 1, tl, tm, l, r), queryUtil(2 * v + 2, tm + 1, tr, l, r));
     }
 
-    void updateUtil(int v, int tl, int tr, int l, int r, U upd)
-    {
+    void updateUtil(int v, int tl, int tr, int l, int r, U upd) {
         push_down(v, tl, tr);
         if (tr < l or tl > r)
             return;
-        if (tl >= l and tr <= r)
-        {
+        if (tl >= l and tr <= r) {
             lazy[v] = combineUpdate(lazy[v], upd, tl, tr);
             push_down(v, tl, tr);
-        }
-        else
-        {
+        } else {
             int tm = (tl + tr) >> 1;
             updateUtil(2 * v + 1, tl, tm, l, r, upd);
             updateUtil(2 * v + 2, tm + 1, tr, l, r, upd);
@@ -256,17 +240,14 @@ struct LSegTree
         }
     }
 
-    void build(vector<T> a)
-    {
+    void build(vector<T> a) {
         assert((int)a.size() == n);
         buildUtil(0, 0, n - 1, a);
     }
-    T query(int l, int r)
-    {
+    T query(int l, int r) {
         return queryUtil(0, 0, n - 1, l, r);
     }
-    void update(int l, int r, U upd)
-    {
+    void update(int l, int r, U upd) {
         updateUtil(0, 0, n - 1, l, r, upd);
     }
 };
@@ -327,7 +308,11 @@ int32_t main() {
     ios_base::sync_with_stdio(false);
     cin.tie(0);
 
-    
+    int tt = 1;
+    cin >> tt;
+    while (tt--) {
+        
+    }
 
     return 0;
 }

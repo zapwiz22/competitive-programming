@@ -3,7 +3,7 @@ struct fenwick {
     int n;
     vector<T> bit;
 
-    fenwick(int n): n(n), bit(n + 1, T()) {}
+    fenwick(int n) : n(n), bit(n + 1, T()) {}
 
     // give 0-based and operations are done 1-based 
     void update(int i, T delta) {
