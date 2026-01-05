@@ -1,68 +1,69 @@
-struct LCA {
-    vector<int> height, euler, first, segtree;
-    vector<bool> visited;
-    int n;
+template <typename T> class SparseTable {
+private:
+    int n, log2dist;
+    vector<vector<T>> st;
 
-    LCA(vector<vector<int>>& adj, int root = 0) {
-        n = adj.size();
-        height.resize(n);
-        first.resize(n);
-        euler.reserve(n * 2);
-        visited.assign(n, false);
-        dfs(adj, root);
-        int m = euler.size();
-        segtree.resize(m * 4);
-        build(1, 0, m - 1);
-    }
-
-    void dfs(vector<vector<int>>& adj, int node, int h = 0) {
-        visited[node] = true;
-        height[node] = h;
-        first[node] = euler.size();
-        euler.push_back(node);
-        for (auto to : adj[node]) {
-            if (!visited[to]) {
-                dfs(adj, to, h + 1);
-                euler.push_back(node);
+public:
+    SparseTable(const vector<T>& v) {
+        n = (int)v.size();
+        log2dist = 1 + (int)log2(n);
+        st.resize(log2dist);
+        st[0] = v;
+        for (int i = 1; i < log2dist; i++) {
+            st[i].resize(n - (1 << i) + 1);
+            for (int j = 0; j + (1 << i) <= n; j++) {
+                st[i][j] = min(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
             }
         }
     }
 
-    void build(int node, int b, int e) {
-        if (b == e) {
-            segtree[node] = euler[b];
-        } else {
-            int mid = (b + e) / 2;
-            build(node << 1, b, mid);
-            build(node << 1 | 1, mid + 1, e);
-            int l = segtree[node << 1], r = segtree[node << 1 | 1];
-            segtree[node] = (height[l] < height[r]) ? l : r;
+    /** @return minimum on the range [l, r] */
+    T query(int l, int r) {
+        int i = (int)log2(r - l + 1);
+        return min(st[i][l], st[i][r - (1 << i) + 1]);
+    }
+};
+
+class LCA {
+private:
+    const int n;
+    const vector<vector<int>>& adj;
+    SparseTable<pair<int, int>> rmq;
+    vector<int> tin, et, dep;
+    int timer = 0;
+
+    /** prepares tin, et, dep arrays */
+    void dfs(int u, int p) {
+        tin[u] = timer;
+        et[timer++] = u;
+        for (int v : adj[u]) {
+            if (v == p) { continue; }
+            dep[v] = dep[u] + 1;
+            dfs(v, u);
+            et[timer++] = u;
         }
     }
 
-    int query(int node, int b, int e, int L, int R) {
-        if (b > R || e < L)
-            return -1;
-        if (b >= L && e <= R)
-            return segtree[node];
-        int mid = (b + e) >> 1;
-
-        int left = query(node << 1, b, mid, L, R);
-        int right = query(node << 1 | 1, mid + 1, e, L, R);
-        if (left == -1) return right;
-        if (right == -1) return left;
-        return height[left] < height[right] ? left : right;
+public:
+    // make sure the adjacency list is 0 indexed
+    LCA(vector<vector<int>>& _adj)
+        : n((int)_adj.size()), adj(_adj), tin(n), et(2 * n), dep(n),
+        rmq(vector<pair<int, int>>(1)) {
+        dfs(0, -1);
+        vector<pair<int, int>> arr(2 * n);
+        for (int i = 0; i < 2 * n; i++) { arr[i] = {dep[et[i]], et[i]}; }
+        rmq = SparseTable<pair<int, int>>(arr);
     }
 
-    int lca(int u, int v) {
-        int left = first[u], right = first[v];
-        if (left > right)
-            swap(left, right);
-        return query(1, 0, euler.size() - 1, left, right);
+    /** @return LCA of nodes a and b */
+    int query(int a, int b) {
+        if (tin[a] > tin[b]) { swap(a, b); }
+        return rmq.query(tin[a], tin[b]).second;
     }
 
+    /** @return dist between node a and b */
     int dist(int a, int b) {
-        int c = lca(a, b);
-        return height[a] + height[b] - 2 * height[c];
+        int c = query(a, b);
+        return dep[a] + dep[b] - 2 * dep[c];
     }
 };
