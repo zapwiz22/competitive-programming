@@ -252,42 +252,6 @@ struct LSegTree {
     }
 };
 
-/* Sparse Table */
-
-/*
-    find the queries in O(1)
-    precalculates everything in log terms O(nlogn)
-    and then gives the result by using the precalculated stuff
-*/
-
-struct SparseTable {
-    vector<int> a;
-    vector<vector<int>> sp;
-    int LOG, mxeN;
-    SparseTable(int mxeSize) {
-        a.resize(mxeSize, 0);
-        mxeN = mxeSize;
-        LOG = log2(mxeSize) + 1;
-        sp.assign(mxeN, vector<int>(LOG, 0));
-    }
-    void modify(int idx, int val) {
-        a[idx] = val;
-        sp[idx][0] = val;
-    }
-    void build() {
-        for (int j = 1; j < LOG; j++) {
-            for (int i = 0; i + (1 << j) - 1 < mxeN; i++) {
-                sp[i][j] = gcd(sp[i][j - 1], sp[i + (1 << (j - 1))][j - 1]);
-            }
-        }
-    }
-    int query(int l, int r) {
-        int len = r - l + 1;
-        int k = 31 - __builtin_clz(len);
-        return gcd(sp[l][k], sp[r - (1 << k) + 1][k]);
-    }
-};
-
 /* Z-Algorithm */
 vector<int> z_func(string s) {
     int n = s.size();
@@ -302,17 +266,236 @@ vector<int> z_func(string s) {
     return z;
 }
 
-/*********************** main ************************/
+template <typename T> class SparseTable {
+private:
+    int n, log2dist;
+    vector<vector<T>> st;
 
-int32_t main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-
-    int tt = 1;
-    cin >> tt;
-    while (tt--) {
-        
+public:
+    SparseTable(const vector<T>& v) {
+        n = (int)v.size();
+        log2dist = 1 + (int)log2(n);
+        st.resize(log2dist);
+        st[0] = v;
+        for (int i = 1; i < log2dist; i++) {
+            st[i].resize(n - (1 << i) + 1);
+            for (int j = 0; j + (1 << i) <= n; j++) {
+                st[i][j] = min(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
+            }
+        }
     }
 
+    /** @return minimum on the range [l, r] */
+    T query(int l, int r) {
+        int i = (int)log2(r - l + 1);
+        return min(st[i][l], st[i][r - (1 << i) + 1]);
+    }
+};
+
+class LCA {
+private:
+    const int n;
+    const vector<vector<int>>& adj;
+    SparseTable<pair<int, int>> rmq;
+    vector<int> tin, et, dep;
+    int timer = 0;
+
+    /** prepares tin, et, dep arrays */
+    void dfs(int u, int p) {
+        tin[u] = timer;
+        et[timer++] = u;
+        for (int v : adj[u]) {
+            if (v == p) { continue; }
+            dep[v] = dep[u] + 1;
+            dfs(v, u);
+            et[timer++] = u;
+        }
+    }
+
+public:
+    // make sure the adjacency list is 0 indexed
+    LCA(vector<vector<int>>& _adj)
+        : n((int)_adj.size()), adj(_adj), tin(n), et(2 * n), dep(n),
+        rmq(vector<pair<int, int>>(1)) {
+        dfs(0, -1);
+        vector<pair<int, int>> arr(2 * n);
+        for (int i = 0; i < 2 * n; i++) { arr[i] = {dep[et[i]], et[i]}; }
+        rmq = SparseTable<pair<int, int>>(arr);
+    }
+
+    /** @return LCA of nodes a and b */
+    int query(int a, int b) {
+        if (tin[a] > tin[b]) { swap(a, b); }
+        return rmq.query(tin[a], tin[b]).second;
+    }
+
+    /** @return dist between node a and b */
+    int dist(int a, int b) {
+        int c = query(a, b);
+        return dep[a] + dep[b] - 2 * dep[c];
+    }
+};
+
+struct Node {
+    Node* links[26];
+    bool eow;  // flag for marking the end of word
+    int endCount = 0;
+    int prefixCount = 0;
+
+    bool containsKey(char ch) {
+        return links[ch - 'a'] != NULL;
+    }
+
+    // insert a new node with a specific key (letter) to the Trie
+    void put(char ch, Node* node) {
+        links[ch - 'a'] = node;
+    }
+
+    // get the node associated to a specific key (letter)
+    Node* get(char ch) {
+        return links[ch - 'a'];
+    }
+
+    // mark the end of the word
+    void setEnd() {
+        eow = true;
+    }
+
+    // check is the key is the end of the word or not
+    bool isEnd() {
+        return eow;
+    }
+};
+
+class Trie {
+private:
+    Node* root;
+
+public:
+    Trie() {
+        root = new Node();
+    }
+
+    // insert word into the Trie
+    // time complexity : O(len) where len is length of the word
+    void insert(string word) {
+        Node* node = root;
+        for (int i = 0; i < word.length(); i++) {
+            if (!node->containsKey(word[i])) {
+                node->put(word[i], new Node());
+            }
+            node = node->get(word[i]);
+            node->prefixCount++;
+        }
+        node->setEnd();
+        node->endCount++;
+    }
+
+    // search for the word within the Trie
+    bool search(string word) {
+        Node* node = root;
+        for (int i = 0; i < word.length(); i++) {
+            if (!node->containsKey(word[i])) {
+                return false;
+            }
+            node = node->get(word[i]);
+        }
+        return node->isEnd();
+    }
+
+    // return whether any word with the given prefix
+    bool startsWith(string prefix) {
+        Node* node = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            if (!node->containsKey(prefix[i])) {
+                return false;
+            }
+            node = node->get(prefix[i]);
+        }
+        return true;
+    }
+
+    // return the count of the occurrences of the string word in the Trie
+    int cntWord(string word) {
+        Node* node = root;
+        for (int i = 0; i < word.length(); i++) {
+            if (!node->containsKey(word[i])) {
+                return 0;
+            }
+            node = node->get(word[i]);
+        }
+        return node->endCount;
+    }
+
+    // return the count of words starting with the given prefix
+    int cntPrefix(string word) {
+        Node* node = root;
+        // int res = 0;
+        for (int i = 0; i < word.length(); i++) {
+            if (!node->containsKey(word[i])) {
+                return 0;
+                // return res;
+            }
+            node = node->get(word[i]);
+            // res += node->prefixCount;
+        }
+        return node->prefixCount;
+        // return res;
+    }
+
+    // erase a word in the given trie
+    void erase(string word) {
+        Node* node = root;
+        for (int i = 0; i < word.length(); i++) {
+            node = node->get(word[i]);
+            node->prefixCount--;
+        }
+        node->endCount--;
+    }
+};
+
+/* tarjan's algorithm for finding the bridges */
+// vector<int> dp(n, 0), tin(n), low(n);
+// vector<bool> vis(n, false);
+// vector<pair<int, int>> bridges;
+// int t = 0;
+// function<void(int, int)> dfs = [&](int u, int p) {
+//     vis[u] = true;
+//     dp[u] = 1;
+//     tin[u] = low[u] = ++t;
+//     for (auto& v : adj[u]) {
+//         if (v == p) continue;
+//         if (vis[v]) {
+//             low[u] = min(low[u], low[v]);
+//         } else {
+//             dfs(v, u);
+//             dp[u] += dp[v];
+//             low[u] = min(low[u], low[v]);
+//             if (low[v] > tin[u]) {
+//                 bridges.push_back({u,v});
+//             }
+//         }
+//     }
+// };
+// dfs(0, -1);
+
+/*********************** main ************************/
+
+void Solve() {
+    
+}
+
+int32_t main() {
+    auto begin = std::chrono::high_resolution_clock::now();
+    ios_base::sync_with_stdio(false), cin.tie(nullptr);
+    int tt = 1;
+    cin >> tt;
+    for (int i = 1; i <= tt; i++) {
+        cerr << "Case #" << i << ": " << endl;
+        Solve();
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+    cerr << "Time measured: " << elapsed.count() * 1e-9 << " seconds.\n";
     return 0;
 }
