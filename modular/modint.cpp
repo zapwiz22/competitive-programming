@@ -1,39 +1,16 @@
-constexpr int MAX_N = 1e6 + 14;
-
 struct Mint {
     int x;
-    Mint(int x = 0) : x((x% MOD + MOD) % MOD) {
-    }
-    explicit operator int() const {
-        return x;
-    }
-    bool operator==(const Mint& rhs) const {
-        return x == rhs.x;
-    }
-    bool operator!=(const Mint& rhs) const {
-        return !(rhs == *this);
-    }
-    friend Mint operator+(const Mint& l, const Mint& r) {
-        return l.x + r.x;
-    }
-    Mint& operator+=(const Mint& o) {
-        return *this = *this + o;
-    }
-    friend Mint operator-(const Mint& l, const Mint& r) {
-        return l.x - r.x;
-    }
-    Mint operator-() const {
-        return -x;
-    }
-    Mint& operator-=(const Mint& o) {
-        return *this = *this - o;
-    }
-    friend Mint operator*(const Mint& l, const Mint& r) {
-        return (int)l.x * r.x;
-    }
-    Mint& operator*=(const Mint& o) {
-        return *this = *this * o;
-    }
+    Mint(int x = 0) : x((x% MOD + MOD) % MOD) {}
+    explicit operator int() const { return x; }
+    bool operator==(const Mint& rhs) const { return x == rhs.x; }
+    bool operator!=(const Mint& rhs) const { return !(rhs == *this); }
+    friend Mint operator+(const Mint& l, const Mint& r) { return l.x + r.x; }
+    Mint& operator+=(const Mint& o) { return *this = *this + o; }
+    friend Mint operator-(const Mint& l, const Mint& r) { return l.x - r.x; }
+    Mint operator-() const { return -x; }
+    Mint& operator-=(const Mint& o) { return *this = *this - o; }
+    friend Mint operator*(const Mint& l, const Mint& r) { return (int)l.x * r.x; }
+    Mint& operator*=(const Mint& o) { return *this = *this * o; }
     Mint pow(int b) const {
         Mint ans = 1;
         Mint a = *this;
@@ -45,17 +22,12 @@ struct Mint {
         }
         return ans;
     }
-    friend Mint operator/(const Mint& l, const Mint& r) {
-        return l * r.pow(MOD - 2);
-    }
-    Mint& operator/=(const Mint& o) {
-        return *this = *this / o;
-    }
-    friend ostream& operator<<(ostream& os, const Mint& o) {
-        return os << o.x;
-    }
+    friend Mint operator/(const Mint& l, const Mint& r) { return l * r.pow(MOD - 2); }
+    Mint& operator/=(const Mint& o) { return *this = *this / o; }
+    friend ostream& operator<<(ostream& os, const Mint& o) { return os << o.x; }
 };
 
+constexpr int MAX_N = 1e6 + 14;
 Mint fac[MAX_N] = {1}, rfac[MAX_N] = {1};
 
 void prep() {

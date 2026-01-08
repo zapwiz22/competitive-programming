@@ -12,40 +12,20 @@ using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node
 
 constexpr int INF = 1e18, MOD = 1000000007;
 
+/* Modint */
 struct Mint {
     int x;
-    Mint(int x = 0) : x((x% MOD + MOD) % MOD) {
-    }
-    explicit operator int() const {
-        return x;
-    }
-    bool operator==(const Mint& rhs) const {
-        return x == rhs.x;
-    }
-    bool operator!=(const Mint& rhs) const {
-        return !(rhs == *this);
-    }
-    friend Mint operator+(const Mint& l, const Mint& r) {
-        return l.x + r.x;
-    }
-    Mint& operator+=(const Mint& o) {
-        return *this = *this + o;
-    }
-    friend Mint operator-(const Mint& l, const Mint& r) {
-        return l.x - r.x;
-    }
-    Mint operator-() const {
-        return -x;
-    }
-    Mint& operator-=(const Mint& o) {
-        return *this = *this - o;
-    }
-    friend Mint operator*(const Mint& l, const Mint& r) {
-        return (int)l.x * r.x;
-    }
-    Mint& operator*=(const Mint& o) {
-        return *this = *this * o;
-    }
+    Mint(int x = 0) : x((x% MOD + MOD) % MOD) {}
+    explicit operator int() const { return x; }
+    bool operator==(const Mint& rhs) const { return x == rhs.x; }
+    bool operator!=(const Mint& rhs) const { return !(rhs == *this); }
+    friend Mint operator+(const Mint& l, const Mint& r) { return l.x + r.x; }
+    Mint& operator+=(const Mint& o) { return *this = *this + o; }
+    friend Mint operator-(const Mint& l, const Mint& r) { return l.x - r.x; }
+    Mint operator-() const { return -x; }
+    Mint& operator-=(const Mint& o) { return *this = *this - o; }
+    friend Mint operator*(const Mint& l, const Mint& r) { return (int)l.x * r.x; }
+    Mint& operator*=(const Mint& o) { return *this = *this * o; }
     Mint pow(int b) const {
         Mint ans = 1;
         Mint a = *this;
@@ -57,15 +37,9 @@ struct Mint {
         }
         return ans;
     }
-    friend Mint operator/(const Mint& l, const Mint& r) {
-        return l * r.pow(MOD - 2);
-    }
-    Mint& operator/=(const Mint& o) {
-        return *this = *this / o;
-    }
-    friend ostream& operator<<(ostream& os, const Mint& o) {
-        return os << o.x;
-    }
+    friend Mint operator/(const Mint& l, const Mint& r) { return l * r.pow(MOD - 2); }
+    Mint& operator/=(const Mint& o) { return *this = *this / o; }
+    friend ostream& operator<<(ostream& os, const Mint& o) { return os << o.x; }
 };
 
 constexpr int MAX_N = 1e6 + 14;
@@ -105,150 +79,317 @@ public:
 };
 
 /* Fenwick Tree */
-struct FenwickTree {
-    vector<int> bit;
-    FenwickTree(int size) { bit.resize(size + 2, 0); }
-    void update(int i, int delta) {
-        for (; i < (int)bit.size(); i += (i & (-i))) {
-            bit[i] += delta;
-        }
-    }
-    int get(int i) {
-        int sum = 0;
-        for (; i > 0; i -= (i & (-i))) {
-            sum += bit[i];
-        }
-        return sum;
-    }
-};
-
-/* Segment Tree */
-struct SegmentTree {
-    vector<int> tree;
+template <typename T>
+struct fenwick {
     int n;
-    SegmentTree(int n) {
-        tree.assign(2 * n, 0);
-        this->n = n;
+    vector<T> bit;
+
+    fenwick(int n) : n(n), bit(n + 1, T()) {}
+
+    // give 0-based and operations are done 1-based 
+    void update(int i, T delta) {
+        for (++i; i <= n; i += i & -i) {
+            bit[i] = bit[i] + delta;
+        }
     }
-    void build() {
-        for (int i = n - 1; i > 0; i--) tree[i] = tree[i << 1] + tree[i << 1 | 1];
-    }
-    void modify(int p, int val) {
-        for (tree[p += n] = val; p > 1; p >>= 1) tree[p >> 1] = tree[p] + tree[p ^ 1];
-    }
-    int query(int l, int r) {
-        int res = 0;
-        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
-            if (l & 1) res += tree[l++];
-            if (r & 1) res += tree[--r];
+    T query(int i) {
+        T res{};
+        for (++i; i > 0; i -= i & -i) {
+            res = res + bit[i];
         }
         return res;
     }
 };
 
-template <class T, class U>
-// source: https://github.com/sharmaharisam/Generic_all_purpose_segtree/blob/main/Segtree.cpp
-struct LSegTree {
-    vector<T> st;
-    vector<U> lazy;
-    int n;
-    T identity_element;
-    U identity_update;
-    /*
-    identity_element: element i such that combine(i,x)=x for any x
-    identity_update: update u such that apply(u,x)=x for any x
-    sum: identity_element=0;identity_update=<some number that cannot occur as an element in array after updating too>
-    max: identity_element=LLONG_MIN;identity_update=0;
-    min: identity_element=LLONG_MAX;identity_update=0;
-    */
-    LSegTree(int n, T identity_element, U identity_update) {
-        this->n = n;
-        this->identity_element = identity_element;
-        this->identity_update = identity_update;
-        st.assign(4 * n, identity_element);
-        lazy.assign(4 * n, identity_update);
-    }
+// struct node {
+//     int a = 0; // don't forget the default value 
 
-    T combine(T l, T r) {
-        // combine 2 nodes
-        T ans = max(l, r);
-        return ans;
-    }
+//     // define the required operations
+//     inline node operator+(node& x) {
+//         return node(a - x.a);
+//     }
+//     inline bool operator<(node& x) {
+//         return a < x.a;
+//     }
+// };
 
-    void buildUtil(int v, int tl, int tr, vector<T>& a) {
-        if (tl == tr) {
-            st[v] = a[tl];
-            return;
-        }
-        int tm = (tl + tr) >> 1;
-        buildUtil(2 * v + 1, tl, tm, a);
-        buildUtil(2 * v + 2, tm + 1, tr, a);
-        st[v] = combine(st[2 * v + 1], st[2 * v + 2]);
-    }
-
-    T apply(T curr, U upd, int tl, int tr) {
-        // transform current answer curr to new answer upd for a node
-        T ans = max(curr, upd);
-        return ans;
-    }
-
-    U combineUpdate(U old_upd, U new_upd, int tl, int tr) {
-        // update lazy node with old and new values combined..
-        U ans = old_upd;
-        ans = max(ans, new_upd);
-        return ans;
-    }
-
-    void push_down(int v, int tl, int tr) {
-        if (lazy[v] == identity_update)
-            return;
-        st[v] = apply(st[v], lazy[v], tl, tr);
-        if (2 * v + 2 < 4 * n) {
-            int tm = (tl + tr) >> 1;
-            lazy[2 * v + 1] = combineUpdate(lazy[2 * v + 1], lazy[v], tl, tm);
-            lazy[2 * v + 2] = combineUpdate(lazy[2 * v + 2], lazy[v], tm + 1, tr);
-        }
-        lazy[v] = identity_update;
-    }
-
-    T queryUtil(int v, int tl, int tr, int l, int r) {
-        push_down(v, tl, tr);
-        if (l > r)
-            return identity_element;
-        if (tr < l or tl > r) {
-            return identity_element;
-        }
-        if (l <= tl and r >= tr) {
-            return st[v];
-        }
-        int tm = (tl + tr) >> 1;
-        return combine(queryUtil(2 * v + 1, tl, tm, l, r), queryUtil(2 * v + 2, tm + 1, tr, l, r));
-    }
-
-    void updateUtil(int v, int tl, int tr, int l, int r, U upd) {
-        push_down(v, tl, tr);
-        if (tr < l or tl > r)
-            return;
-        if (tl >= l and tr <= r) {
-            lazy[v] = combineUpdate(lazy[v], upd, tl, tr);
-            push_down(v, tl, tr);
-        } else {
-            int tm = (tl + tr) >> 1;
-            updateUtil(2 * v + 1, tl, tm, l, r, upd);
-            updateUtil(2 * v + 2, tm + 1, tr, l, r, upd);
-            st[v] = combine(st[2 * v + 1], st[2 * v + 2]);
+/* Segment Tree */
+template <class S, S(*op)(S, S), S(*e)()> struct segtree {
+public:
+    segtree() : segtree(0) {}
+    segtree(int32_t n) : segtree(std::vector<S>(n, e())) {}
+    segtree(const std::vector<S>& v) : _n(int32_t(v.size())) {
+        log = 64 - __builtin_clzll(_n);
+        size = 1 << log;
+        d = std::vector<S>(2 * size, e());
+        for (int32_t i = 0; i < _n; i++) d[size + i] = v[i];
+        for (int32_t i = size - 1; i >= 1; i--) {
+            update(i);
         }
     }
 
-    void build(vector<T> a) {
-        assert((int)a.size() == n);
-        buildUtil(0, 0, n - 1, a);
+    void set(int32_t p, S x) {
+        assert(0 <= p && p < _n);
+        p += size;
+        d[p] = x;
+        for (int32_t i = 1; i <= log; i++) update(p >> i);
     }
-    T query(int l, int r) {
-        return queryUtil(0, 0, n - 1, l, r);
+
+    S get(int32_t p) {
+        assert(0 <= p && p < _n);
+        return d[p + size];
     }
-    void update(int l, int r, U upd) {
-        updateUtil(0, 0, n - 1, l, r, upd);
+
+    S prod(int32_t l, int32_t r) {
+        assert(0 <= l && l <= r && r <= _n);
+        S sml = e(), smr = e();
+        l += size;
+        r += size;
+
+        while (l < r) {
+            if (l & 1) sml = op(sml, d[l++]);
+            if (r & 1) smr = op(d[--r], smr);
+            l >>= 1;
+            r >>= 1;
+        }
+        return op(sml, smr);
+    }
+
+    S all_prod() { return d[1]; }
+
+    template <bool (*f)(S)> int32_t max_right(int32_t l) {
+        return max_right(l, [](S x) { return f(x); });
+    }
+    template <class F> int32_t max_right(int32_t l, F f) {
+        assert(0 <= l && l <= _n);
+        assert(f(e()));
+        if (l == _n) return _n;
+        l += size;
+        S sm = e();
+        do {
+            while (l % 2 == 0) l >>= 1;
+            if (!f(op(sm, d[l]))) {
+                while (l < size) {
+                    l = (2 * l);
+                    if (f(op(sm, d[l]))) {
+                        sm = op(sm, d[l]);
+                        l++;
+                    }
+                }
+                return l - size;
+            }
+            sm = op(sm, d[l]);
+            l++;
+        } while ((l & -l) != l);
+        return _n;
+    }
+
+    template <bool (*f)(S)> int32_t min_left(int32_t r) {
+        return min_left(r, [](S x) { return f(x); });
+    }
+    template <class F> int32_t min_left(int32_t r, F f) {
+        assert(0 <= r && r <= _n);
+        assert(f(e()));
+        if (r == 0) return 0;
+        r += size;
+        S sm = e();
+        do {
+            r--;
+            while (r > 1 && (r % 2)) r >>= 1;
+            if (!f(op(d[r], sm))) {
+                while (r < size) {
+                    r = (2 * r + 1);
+                    if (f(op(d[r], sm))) {
+                        sm = op(d[r], sm);
+                        r--;
+                    }
+                }
+                return r + 1 - size;
+            }
+            sm = op(d[r], sm);
+        } while ((r & -r) != r);
+        return 0;
+    }
+
+private:
+    int32_t _n, size, log;
+    std::vector<S> d;
+
+    void update(int32_t k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+};
+
+/* Lazy Segtree */
+template <class S,
+    S(*op)(S, S),
+    S(*e)(),
+    class F,
+    S(*mapping)(F, S),
+    F(*composition)(F, F),
+    F(*id)()>
+struct lazy_segtree {
+public:
+    lazy_segtree() : lazy_segtree(0) {}
+    lazy_segtree(int32_t n) : lazy_segtree(std::vector<S>(n, e())) {}
+    lazy_segtree(const std::vector<S>& v) : _n(int32_t(v.size())) {
+        log = 64 - __builtin_clzll(_n);
+        size = 1 << log;
+        d = std::vector<S>(2 * size, e());
+        lz = std::vector<F>(size, id());
+        for (int32_t i = 0; i < _n; i++) d[size + i] = v[i];
+        for (int32_t i = size - 1; i >= 1; i--) {
+            update(i);
+        }
+    }
+
+    void set(int32_t p, S x) {
+        assert(0 <= p && p < _n);
+        p += size;
+        for (int32_t i = log; i >= 1; i--) push(p >> i);
+        d[p] = x;
+        for (int32_t i = 1; i <= log; i++) update(p >> i);
+    }
+
+    S get(int32_t p) {
+        assert(0 <= p && p < _n);
+        p += size;
+        for (int32_t i = log; i >= 1; i--) push(p >> i);
+        return d[p];
+    }
+
+    S prod(int32_t l, int32_t r) {
+        assert(0 <= l && l <= r && r <= _n);
+        if (l == r) return e();
+
+        l += size;
+        r += size;
+
+        for (int32_t i = log; i >= 1; i--) {
+            if (((l >> i) << i) != l) push(l >> i);
+            if (((r >> i) << i) != r) push(r >> i);
+        }
+
+        S sml = e(), smr = e();
+        while (l < r) {
+            if (l & 1) sml = op(sml, d[l++]);
+            if (r & 1) smr = op(d[--r], smr);
+            l >>= 1;
+            r >>= 1;
+        }
+
+        return op(sml, smr);
+    }
+
+    S all_prod() { return d[1]; }
+
+    void apply(int32_t p, F f) {
+        assert(0 <= p && p < _n);
+        p += size;
+        for (int32_t i = log; i >= 1; i--) push(p >> i);
+        d[p] = mapping(f, d[p]);
+        for (int32_t i = 1; i <= log; i++) update(p >> i);
+    }
+    void apply(int32_t l, int32_t r, F f) {
+        assert(0 <= l && l <= r && r <= _n);
+        if (l == r) return;
+
+        l += size;
+        r += size;
+
+        for (int32_t i = log; i >= 1; i--) {
+            if (((l >> i) << i) != l) push(l >> i);
+            if (((r >> i) << i) != r) push((r - 1) >> i);
+        }
+
+        {
+            int32_t l2 = l, r2 = r;
+            while (l < r) {
+                if (l & 1) all_apply(l++, f);
+                if (r & 1) all_apply(--r, f);
+                l >>= 1;
+                r >>= 1;
+            }
+            l = l2;
+            r = r2;
+        }
+
+        for (int32_t i = 1; i <= log; i++) {
+            if (((l >> i) << i) != l) update(l >> i);
+            if (((r >> i) << i) != r) update((r - 1) >> i);
+        }
+    }
+
+    template <bool (*g)(S)> int32_t max_right(int32_t l) {
+        return max_right(l, [](S x) { return g(x); });
+    }
+    template <class G> int32_t max_right(int32_t l, G g) {
+        assert(0 <= l && l <= _n);
+        assert(g(e()));
+        if (l == _n) return _n;
+        l += size;
+        for (int32_t i = log; i >= 1; i--) push(l >> i);
+        S sm = e();
+        do {
+            while (l % 2 == 0) l >>= 1;
+            if (!g(op(sm, d[l]))) {
+                while (l < size) {
+                    push(l);
+                    l = (2 * l);
+                    if (g(op(sm, d[l]))) {
+                        sm = op(sm, d[l]);
+                        l++;
+                    }
+                }
+                return l - size;
+            }
+            sm = op(sm, d[l]);
+            l++;
+        } while ((l & -l) != l);
+        return _n;
+    }
+
+    template <bool (*g)(S)> int32_t min_left(int32_t r) {
+        return min_left(r, [](S x) { return g(x); });
+    }
+    template <class G> int32_t min_left(int32_t r, G g) {
+        assert(0 <= r && r <= _n);
+        assert(g(e()));
+        if (r == 0) return 0;
+        r += size;
+        for (int32_t i = log; i >= 1; i--) push((r - 1) >> i);
+        S sm = e();
+        do {
+            r--;
+            while (r > 1 && (r % 2)) r >>= 1;
+            if (!g(op(d[r], sm))) {
+                while (r < size) {
+                    push(r);
+                    r = (2 * r + 1);
+                    if (g(op(d[r], sm))) {
+                        sm = op(d[r], sm);
+                        r--;
+                    }
+                }
+                return r + 1 - size;
+            }
+            sm = op(d[r], sm);
+        } while ((r & -r) != r);
+        return 0;
+    }
+
+private:
+    int32_t _n, size, log;
+    std::vector<S> d;
+    std::vector<F> lz;
+
+    void update(int32_t k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+    void all_apply(int32_t k, F f) {
+        d[k] = mapping(f, d[k]);
+        if (k < size) lz[k] = composition(f, lz[k]);
+    }
+    void push(int32_t k) {
+        all_apply(2 * k, lz[k]);
+        all_apply(2 * k + 1, lz[k]);
+        lz[k] = id();
     }
 };
 
@@ -266,6 +407,7 @@ vector<int> z_func(string s) {
     return z;
 }
 
+/* Sparse Table */
 template <typename T> class SparseTable {
 private:
     int n, log2dist;
@@ -336,6 +478,7 @@ public:
     }
 };
 
+/* Trie */
 struct Node {
     Node* links[26];
     bool eow;  // flag for marking the end of word
@@ -482,7 +625,7 @@ public:
 /*********************** main ************************/
 
 void Solve() {
-    
+
 }
 
 int32_t main() {
