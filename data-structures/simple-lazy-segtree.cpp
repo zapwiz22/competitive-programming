@@ -26,6 +26,11 @@ struct LazySegTree {
             t[i] = op(t[i << 1], t[i << 1 | 1]);
     }
 
+    void modify(int p, S val) {
+        for (t[p += n] = val; p > 1; p >>= 1)
+            t[p >> 1] = op(t[p], t[p ^ 1]);
+    }
+
     void apply(int p, const L& v) {
         t[p] = mapping(v, t[p]);
         if (p < n) d[p] = composition(v, d[p]);
