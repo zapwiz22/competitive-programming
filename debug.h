@@ -5,7 +5,7 @@
 using namespace std;
 
 // Forward declarations for all _print functions
-void _print(int x);
+void _print(int32_t x);
 void _print(long x);
 void _print(long long x);
 void _print(unsigned x);
@@ -74,7 +74,7 @@ template<typename T>
 void _print(const complex<T>& c);
 
 // Core type printers implementation
-void _print(int x) { cerr << x; }
+void _print(int32_t x) { cerr << x; }
 void _print(long x) { cerr << x; }
 void _print(long long x) { cerr << x; }
 void _print(unsigned x) { cerr << x; }
@@ -301,17 +301,17 @@ void debug_print(const char* names, Args&&... args) {
     stringstream ss(names);
     string name;
     vector<string> vnames;
-    
+
     // Parse variable names
     while (getline(ss, name, ',')) {
         name.erase(0, name.find_first_not_of(" \t\n\r\f\v"));
         name.erase(name.find_last_not_of(" \t\n\r\f\v") + 1);
         vnames.push_back(name);
     }
-    
+
     // Print each variable with its name
-    int i = 0;
-    ((cerr << (i++ ? " | " : "") << vnames[i-1] << " = ", _print(args)), ...);
+    int32_t i = 0;
+    ((cerr << (i++ ? " | " : "") << vnames[i - 1] << " = ", _print(args)), ...);
     cerr << "\033[0m" << endl;
 }
 

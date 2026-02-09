@@ -364,18 +364,23 @@
   ],
   "description": "jayant"
 },
-"tnayaj": {
-  "prefix": "tnayaj",
+"savy": {
+  "prefix": "savy",
   "body": [
     "/*",
-    " *  author: tnayaj",
+    " *  author:  tnayaj",
     " *  created: $CURRENT_DATE-$CURRENT_MONTH-$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
     "*/",
-    "",
     "#include <bits/stdc++.h>",
     "using namespace std;",
     "#define int long long ",
-    "constexpr int INF = 1e18, MOD = 1e9 + 7;",
+    "const int INF = 1e18, MOD = 1000000007; // 998244353;",
+    "",
+    "#ifdef LOCAL",
+    "#include 'debug.h'",
+    "#else",
+    "#define debug(...) 22",
+    "#endif",
     "",
     "int32_t main() {",
     "    ios_base::sync_with_stdio(false);",
@@ -657,7 +662,7 @@
   ],
   "description": "generation"
 },
-"debug.h": {
+"debug": {
   "prefix": "debug",
   "body": [
     "#ifndef DEBUG_H",
@@ -667,7 +672,7 @@
     "using namespace std;",
     "",
     "// Forward declarations for all _print functions",
-    "void _print(int x);",
+    "void _print(int32_t x);",
     "void _print(long x);",
     "void _print(long long x);",
     "void _print(unsigned x);",
@@ -736,7 +741,7 @@
     "void _print(const complex<T>& c);",
     "",
     "// Core type printers implementation",
-    "void _print(int x) { cerr << x; }",
+    "void _print(int32_t x) { cerr << x; }",
     "void _print(long x) { cerr << x; }",
     "void _print(long long x) { cerr << x; }",
     "void _print(unsigned x) { cerr << x; }",
@@ -972,14 +977,14 @@
     "    }",
     "    ",
     "    // Print each variable with its name",
-    "    int i = 0;",
+    "    int32_t i = 0;",
     "    ((cerr << (i++ ? \" | \" : \"\") << vnames[i-1] << \" = \", _print(args)), ...);",
     "    cerr << \"\\033[0m\" << endl;",
     "}",
     "",
     "#endif // DEBUG_H"
   ],
-  "description": "debug.h"
+  "description": "debug"
 },
 "tarjan algo for bridges ": {
   "prefix": "tarjan-algo",
