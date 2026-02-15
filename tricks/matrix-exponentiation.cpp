@@ -1,41 +1,50 @@
-const int mod = 1e9 + 7;
-using matrix = vector<vector<int>>;
-const matrix I = {
-    {1, 0},
-    {0, 1}
-};
-const matrix M = {
-    {3, 2},
-    {2, 2}
-};
+// matrix multiplication 
+/*
+    if f(n) = c1*f(n-1) + c2*f(n-2) + ... + ck*f(n-k)
+    then f(n) in k^3log(n) time complexity 
+    X = 
+    {   
+        {0, 1, 0, 0, ..., 0},
+        {0, 0, 1, 0, ..., 0},
+        {0, 0, 0, 1, ..., 0},
+        ...
+        {0, 0, 0, 0, ..., 1},
+        {ck, ck-1, ..., c2, c1}
+    }
 
-static matrix operator*(const matrix& A, const matrix& B) {
-    const int m = A.size(), n = A[0].size(), p = B[0].size();
-    matrix C(m, vector<int>(p, 0));
-    for (int i = 0; i < m; i++) {
-        for (int k = 0; k < n; k++) {
-            for (int j = 0; j < p; j++) {
-                C[i][j] = (C[i][j] + 1LL * A[i][k] * B[k][j]) % mod;
+    general equation 
+    X * {{f(i)}, {f(i+1)}, {f(i+2)}, ..., {f(i+k-1)}} = {{f(i+1)}, {f(i+2)}, ..., {f(i+k)}}
+    so 
+    {{f(n)}, {f(n+1)}, ..., {f(n+k-1)}} = X^n * {{f(0)}, {f(1)}, ..., {f(k-1)}}
+    find  using binary exponentiation 
+*/
+auto prod = [&](vector<vector<int>>& a, vector<vector<int>>& b) {
+    vector<vector<int>> nw(a.size(), vector<int>(b[0].size(),0));
+    for (int i=0;i<(int)a.size();i++) {
+        for (int j=0;j<(int)b[0].size();j++) {
+            for (int k=0;k<(int)b.size();k++) {
+                nw[i][j] += 1ll*a[i][k]*b[k][j];
             }
         }
     }
-    return C;
-}
-// Matrix exponentiation (LSBF)
-static matrix pow(const matrix& M, int n) {
-    matrix ans = I, P = M;
-    for (; n > 0; n >>= 1) {
-        if (n & 1)
-            ans = ans * P;
-        P = P * P;
-    }
-    return ans;
-}
-class Solution {
-public:
-    int numOfWays(int n) {
-        if (n == 1) return 12;
-        matrix A = pow(M, n - 1);
-        return 6LL * (1LL * A[0][0] + A[0][1] + A[1][0] + A[1][1]) % mod;
-    }
+    return nw;
 };
+
+vector<vector<int>> x = {
+    {0, 1},
+    {1, 1}
+};
+
+vector<vector<int>> ans(2,vector<int>(2,0));
+for (int i=0;i<2;i++) ans[i][i] = 1;
+while (n>0) {
+    if (n&1) {
+        ans = prod(ans,x);
+    }
+    x = prod(x,x);
+    n >>= 1;
+}
+
+vector<vector<int>> fib = {{0}, {1}};
+ans = prod(ans, fib);
+cout << ans[0][0] << endl;
