@@ -1,0 +1,7 @@
+{
+	"theme": "auto",
+	"ignored_packages":
+	[
+		"Vintage",
+	],
+}
