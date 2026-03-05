@@ -1,9 +1,6 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include <bits/stdc++.h>
-using namespace std;
-
 // Primitive types
 void _print(int32_t x) { cerr << x; }
 void _print(long x) { cerr << x; }
@@ -27,6 +24,17 @@ void _print(const pair<T1, T2> &p) {
     cerr << ", ";
     _print(p.second);
     cerr << " }";
+}
+
+// Array
+template<typename T, size_t N>
+void _print(const array<T, N> &a) {
+    cerr << "[ ";
+    for (const T &i : a) {
+        _print(i);
+        cerr << " ";
+    }
+    cerr << "]";
 }
 
 // Vector
