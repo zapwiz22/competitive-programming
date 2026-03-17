@@ -323,8 +323,8 @@
   ],
   "description": "codechef temp"
 },
-"jayant": {
-  "prefix": "jayant",
+"tnayaj": {
+  "prefix": "tnayaj",
   "body": [
     "#include <bits/stdc++.h>",
     "using namespace std;",
@@ -364,11 +364,38 @@
   ],
   "description": "jayant"
 },
-"savy": {
+"basic": {
+  "prefix": "qt",
+  "body": [
+    "/*",
+    " *  author:  tnayaj",
+    " *  created: $CURRENT_DATE-$CURRENT_MONTH-$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+    "*/",
+    "#include <bits/stdc++.h>",
+    "using namespace std;",
+    "#define int long long ",
+    "",
+    "#ifdef LOCAL",
+    "#include \"algo/debug.h\"",
+    "#else",
+    "#define debug(...) 22",
+    "#endif",
+    "",
+    "int32_t main() {",
+    "  ios_base::sync_with_stdio(false), cin.tie(nullptr);",
+    "",
+    "  $0",
+    "",
+    "  return 0;",
+    "}"
+  ],
+  "description": "basic"
+},
+"jk": {
   "prefix": "savy",
   "body": [
     // "/*",
-    // " *  author:  tnayaj",
+    // " *  author:  jayant kumar",
     // " *  created: $CURRENT_DATE-$CURRENT_MONTH-$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
     // "*/",
     "#include <bits/stdc++.h>",
@@ -377,7 +404,7 @@
     "const int INF = 1e18, MOD = 1000000007; // 998244353;",
     "",
     "#ifdef LOCAL",
-    "#include \"debug.h\"",
+    "#include \"algo/debug.h\"",
     "#else",
     "#define debug(...) 22",
     "#endif",
@@ -399,10 +426,10 @@
     "  return 0;",
     "}"
   ],
-  "description": "tnayaj"
+  "description": "jayant"
 },
-"jk": {
-  "prefix": "jk",
+"jayant": {
+  "prefix": "jayant",
   "body": [
     "/*",
     " *  author: zapwiz22",
@@ -1725,6 +1752,34 @@
     "};"
   ],
   "description": "matmultiplication"
+},
+"kmp algorithm string matching": {
+  "prefix": "kmp-algorithm",
+  "body": [
+    "// KMP Algorithm ",
+    "vector<int> kmp(vector<int>& pat) {",
+    "  int n = (int)pat.size();",
+    "  vector<int> lps(n, 0); // lps[i] => longest prefix which is also suffix for the sub-pattern [0..i]",
+    "  lps[0] = 0;",
+    "  int i = 1, len = 0;",
+    "  while (i < n) {",
+    "    if (pat[i] == pat[len]) {",
+    "      len++;",
+    "      lps[i] = len;",
+    "      i++;",
+    "    } else {",
+    "      if (len != 0) { // fallback in the pattern ",
+    "        len = lps[len - 1];",
+    "      } else {",
+    "        lps[i] = 0;",
+    "        i++;",
+    "      }",
+    "    }",
+    "  }",
+    "  return lps;",
+    "}"
+  ],
+  "description": "kmp algorithm string matching"
 },
 
 }
