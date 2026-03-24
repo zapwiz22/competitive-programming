@@ -41,7 +41,7 @@ void _print(const array<T, N> &a) {
 template<typename T>
 void _print(const vector<T> &v) {
     cerr << "[ ";
-    for (auto &i : v) {
+    for (auto i : v) {
         _print(i);
         cerr << " ";
     }
