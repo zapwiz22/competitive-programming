@@ -59,6 +59,7 @@ struct LazySegTree {
         l += n;
         r += n;
         int l0 = l, r0 = r;
+        push(l0), push(r0 - 1);
 
         for (; l < r; l >>= 1, r >>= 1) {
             if (l & 1) apply(l++, v);
