@@ -205,3 +205,106 @@ int32_t main() {
     }
     return 0;
 }
+
+// Polynomial Queries CSES 
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long 
+
+struct node {
+    int sum;
+    int lazy_a, lazy_d;
+    node() {
+        sum = 0;
+        lazy_a = 0, lazy_d = 0;
+    }
+};
+
+node t[4 * 200200];
+
+node merge(node a, node b) {
+    node ans;
+    ans.sum = a.sum + b.sum;
+    return ans;
+}
+
+void build(int id, int l, int r) {
+    if (l == r) {
+        t[id].sum = t[id].lazy_a = t[id].lazy_d = 0;
+        return;
+    }
+    int mid = l + (r - l) / 2;
+    build(id << 1, l, mid);
+    build(id << 1 | 1, mid + 1, r);
+    t[id] = merge(t[id << 1], t[id << 1 | 1]);
+}
+
+void push(int id, int l, int r) {
+    if (t[id].lazy_a) {
+        t[id].sum += 1ll * (r - l + 1) * (2 * t[id].lazy_a + 1ll * (r - l) * t[id].lazy_d) / 2;
+        if (l != r) {
+            t[id << 1].lazy_a += t[id].lazy_a;
+            t[id << 1].lazy_d += t[id].lazy_d;
+            t[id << 1 | 1].lazy_d += t[id].lazy_d;
+            int mid = l + (r - l) / 2;
+            int n = (mid + 1 - l + 1);
+            t[id << 1 | 1].lazy_a += t[id].lazy_a + (n - 1) * t[id].lazy_d;
+        }
+        t[id].lazy_a = 0, t[id].lazy_d = 0;
+    }
+}
+
+void update(int id, int l, int r, int lq, int rq, int a, int d) {
+    push(id, l, r);
+    if (lq > r || rq < l) return;
+    if (lq <= l && rq >= r) {
+        int n = l - lq + 1;
+        t[id].lazy_a += a + (n - 1) * d;
+        t[id].lazy_d += d;
+        push(id, l, r);
+        return;
+    }
+    int mid = l + (r - l) / 2;
+    update(id << 1, l, mid, lq, rq, a, d);
+    update(id << 1 | 1, mid + 1, r, lq, rq, a, d);
+    t[id] = merge(t[id << 1], t[id << 1 | 1]);
+}
+
+node query(int id, int l, int r, int lq, int rq) {
+    push(id, l, r);
+    if (lq > r || rq < l) return node();
+    if (lq <= l && rq >= r) return t[id];
+    int mid = l + (r - l) / 2;
+    return merge(query(id << 1, l, mid, lq, rq), query(id << 1 | 1, mid + 1, r, lq, rq));
+}
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> v(n);
+    build(1, 0, n - 1);
+    for (int i = 0; i < n; i++) {
+        cin >> v[i];
+        update(1, 0, n - 1, i, i, v[i], 0);
+    }
+
+    while (q--) {
+        int t, a, b;
+        cin >> t >> a >> b;
+        if (t == 1) {
+            update(1, 0, n - 1, a - 1, b - 1, 1, 1);
+        } else {
+            cout << query(1, 0, n - 1, a - 1, b - 1).sum << endl;
+        }
+    }
+}
+
+int32_t main() {
+    ios::sync_with_stdio(false), cin.tie(nullptr);
+    int tt = 1;
+    // cin >> tt;
+    while (tt--) {
+        solve();
+    }
+    return 0;
+}
