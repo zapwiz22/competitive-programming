@@ -1,162 +1,87 @@
-#ifndef DEBUG_H
-#define DEBUG_H
+template <typename A, typename B>
+string to_string(pair<A, B> p);
 
-// Primitive types
-void _print(int32_t x) { cerr << x; }
-void _print(long x) { cerr << x; }
-void _print(long long x) { cerr << x; }
-void _print(unsigned x) { cerr << x; }
-void _print(unsigned long x) { cerr << x; }
-void _print(unsigned long long x) { cerr << x; }
-void _print(float x) { cerr << x; }
-void _print(double x) { cerr << x; }
-void _print(long double x) { cerr << x; }
-void _print(char x) { cerr << x; }
-void _print(const string &x) { cerr << x; }
-void _print(const char *x) { cerr << x; }
-void _print(bool x) { cerr << x; }
+template <typename A, typename B, typename C>
+string to_string(tuple<A, B, C> p);
 
-// Pair
-template<typename T1, typename T2>
-void _print(const pair<T1, T2> &p) {
-    cerr << "{ ";
-    _print(p.first);
-    cerr << ", ";
-    _print(p.second);
-    cerr << " }";
+template <typename A, typename B, typename C, typename D>
+string to_string(tuple<A, B, C, D> p);
+
+string to_string(const string& s) {
+  return '"' + s + '"';
 }
 
-// Array
-template<typename T, size_t N>
-void _print(const array<T, N> &a) {
-    cerr << "[ ";
-    for (const T &i : a) {
-        _print(i);
-        cerr << " ";
+string to_string(const char* s) {
+  return to_string((string) s);
+}
+
+string to_string(bool b) {
+  return (b ? "true" : "false");
+}
+
+string to_string(vector<bool> v) {
+  bool first = true;
+  string res = "{";
+  for (int i = 0; i < static_cast<int>(v.size()); i++) {
+    if (!first) {
+      res += ", ";
     }
-    cerr << "]";
+    first = false;
+    res += to_string(v[i]);
+  }
+  res += "}";
+  return res;
 }
 
-// Vector
-template<typename T>
-void _print(const vector<T> &v) {
-    cerr << "[ ";
-    for (auto i : v) {
-        _print(i);
-        cerr << " ";
+template <size_t N>
+string to_string(bitset<N> v) {
+  string res = "";
+  for (size_t i = 0; i < N; i++) {
+    res += static_cast<char>('0' + v[i]);
+  }
+  return res;
+}
+
+template <typename A>
+string to_string(A v) {
+  bool first = true;
+  string res = "{";
+  for (const auto &x : v) {
+    if (!first) {
+      res += ", ";
     }
-    cerr << "]";
+    first = false;
+    res += to_string(x);
+  }
+  res += "}";
+  return res;
 }
 
-// Set / Multiset
-template<typename T>
-void _print(const set<T> &s) {
-    cerr << "{ ";
-    for (auto &i : s) {
-        _print(i);
-        cerr << " ";
-    }
-    cerr << "}";
+template <typename A, typename B>
+string to_string(pair<A, B> p) {
+  return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";
 }
 
-template<typename T>
-void _print(const multiset<T> &s) {
-    cerr << "{ ";
-    for (auto &i : s) {
-        _print(i);
-        cerr << " ";
-    }
-    cerr << "}";
+template <typename A, typename B, typename C>
+string to_string(tuple<A, B, C> p) {
+  return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ")";
 }
 
-// Unordered set
-template<typename T>
-void _print(const unordered_set<T> &s) {
-    cerr << "{ ";
-    for (auto &i : s) {
-        _print(i);
-        cerr << " ";
-    }
-    cerr << "}";
+template <typename A, typename B, typename C, typename D>
+string to_string(tuple<A, B, C, D> p) {
+  return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ", " + to_string(get<3>(p)) + ")";
 }
 
-// Map
-template<typename K, typename V>
-void _print(const map<K, V> &m) {
-    cerr << "{ ";
-    for (auto &p : m) {
-        _print(p.first);
-        cerr << ": ";
-        _print(p.second);
-        cerr << " ";
-    }
-    cerr << "}";
+void debug_out() { cerr << endl; }
+
+template <typename Head, typename... Tail>
+void debug_out(Head H, Tail... T) {
+  cerr << " " << to_string(H);
+  debug_out(T...);
 }
 
-template<typename K, typename V>
-void _print(const unordered_map<K, V> &m) {
-    cerr << "{ ";
-    for (auto &p : m) {
-        _print(p.first);
-        cerr << ": ";
-        _print(p.second);
-        cerr << " ";
-    }
-    cerr << "}";
-}
-
-// Stack
-template<typename T>
-void _print(stack<T> st) {
-    vector<T> v;
-    while (!st.empty()) {
-        v.push_back(st.top());
-        st.pop();
-    }
-    reverse(v.begin(), v.end());
-    _print(v);
-}
-
-// Queue
-template<typename T>
-void _print(queue<T> q) {
-    vector<T> v;
-    while (!q.empty()) {
-        v.push_back(q.front());
-        q.pop();
-    }
-    _print(v);
-}
-
-// Priority queue
-template<typename T>
-void _print(priority_queue<T> pq) {
-    vector<T> v;
-    while (!pq.empty()) {
-        v.push_back(pq.top());
-        pq.pop();
-    }
-    _print(v);
-}
-
-// Debug function
-#define debug(...) debug_print(#__VA_ARGS__, __VA_ARGS__)
-
-template<typename... Args>
-void debug_print(const char* names, Args&&... args) {
-    stringstream ss(names);
-    string name;
-    vector<string> vnames;
-
-    while (getline(ss, name, ',')) {
-        name.erase(0, name.find_first_not_of(" \t"));
-        name.erase(name.find_last_not_of(" \t") + 1);
-        vnames.push_back(name);
-    }
-
-    int32_t i = 0;
-    ((cerr << vnames[i++] << " = ", _print(args), cerr << " | "), ...);
-    cerr << endl;
-}
-
+#ifdef LOCAL
+#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
+#else
+#define debug(...)
 #endif
