@@ -57,8 +57,8 @@ void update(int id, int l, int r, int lq, int rq, int val) {
         return;
     }
     int mid = l + (r - l) / 2;
-    update(i << 1, l, mid, lq, rq, val);
-    update(i << 1 | 1, mid + 1, r, lq, rq, val);
+    update(id << 1, l, mid, lq, rq, val);
+    update(id << 1 | 1, mid + 1, r, lq, rq, val);
     t[id] = merge(t[id << 1], t[id << 1 | 1]); 
 }
 
